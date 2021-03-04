@@ -16,5 +16,13 @@ if ( ! class_exists ('Cart4Post' ) ){
     include_once dirname( __FILE__ ) . '/includes/class-cart4post.php';
 }
 
-$GLOBALS['cart4post'] = Cart4Post::instance();
+if ( ! defined( 'C4P_PLUGIN_FILE' ) ) {
+    define( 'C4P_PLUGIN_FILE', __FILE__ );
+}
+
+function c4p(){
+    return Cart4Post::instance();
+}
+
+$GLOBALS['cart4post'] = C4P();
 ?>

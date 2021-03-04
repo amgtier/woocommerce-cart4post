@@ -18,6 +18,11 @@ class Cart4Post {
      */
     protected static $_instance = null;
 
+    /**
+     * The hash table to store all the carts for each posts.
+     */
+    public $carts = Array();
+
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
@@ -31,7 +36,7 @@ class Cart4Post {
     public function __construct() {
         // exec when woocomerce exists.
         include_once (ABSPATH . 'wp-admin/includes/plugin.php' );
-        if ( is_plugin_active( 'woocommerce-3.2.6/woocommerce.php' ) ){
+        if ( class_exists( 'WooCommerce' ) ){
             // initiates
             $this -> define_constants();
             // $this -> install();
@@ -45,7 +50,8 @@ class Cart4Post {
     }
 
     private function define_constants() {
-        $this -> define( 'CART4POSTPATH', ABSPATH . 'wp-content/plugins/woocommerce-cart4post/' );
+        $this -> define( 'C4P_ABSPATH', dirname( C4P_PLUGIN_FILE ) . '/' );
+        $this -> define( 'C4P_VERSION', '1.0.0' );
     }
 
     private function define( $name, $value ){
@@ -55,11 +61,17 @@ class Cart4Post {
     }
 
     public function includes() {
-        include_once( CART4POSTPATH . 'admin/class-c4p-admin.php');
-        include_once( CART4POSTPATH . 'includes/class-c4p-shortcodes.php');
-        /* shortcodes */
-        include_once( CART4POSTPATH . 'includes/class-c4p-shortcode-products.php');
-        include_once( CART4POSTPATH . 'includes/c4p-template-hooks.php');
+        include_once( C4P_ABSPATH . 'admin/class-c4p-admin.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-ajax.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-shortcodes.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-cart.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-frontend-scripts.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-checkout.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-shortcode-products.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-shortcode-checkout.php');
+        include_once( C4P_ABSPATH . 'includes/c4p-template-hooks.php');
+        include_once( C4P_ABSPATH . 'includes/c4p-filter-functions.php');
+        // include_once( C4P_ABSPATH . 'includes/c4p-product-type.php');
     }
 
     private function install() {
@@ -77,6 +89,13 @@ class Cart4Post {
         add_action( 'init', array( 'C4P_Shortcodes', 'init' ) );
     }
 
+    public function cart() {
+        return C4P_Cart::instance();
+    }
+
+    public function checkout() {
+        return C4P_Checkout::instance();
+    }
 }
 
 ?>
