@@ -67,6 +67,14 @@ class C4P_Shortcode_Checkout extends WC_Shortcode_Checkout {
 
 		// Check cart contents for errors
 		// do_action( 'woocommerce_check_cart_items' );
+        if ( WC()->cart ){
+            WC()->cart->calculate_totals();
+        }
+        if ( isset( $_GET[ 'coupon_code' ] ) ) {
+            WC()->cart->add_discount( sanitize_text_field( $_GET[ 'coupon_code' ] ) );
+        }
+        do_action( 'c4p_cart_collaterals', get_the_ID() );
+        return; // Don't fill in checkout form here.
 
 		// Calc totals
 		WC()->cart->calculate_totals();

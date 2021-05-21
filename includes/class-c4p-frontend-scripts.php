@@ -36,7 +36,7 @@ class C4P_Frontend_Scripts {
         $suffix = '';
         $register_scripts = array(
             'c4p-checkout' => array(
-                'src'   => plugins_url( 'assets/js/checkout' . $suffix .'.js', C4P_PLUGIN_FILE ),
+                'src'   => plugins_url( 'assets/js/frontend/checkout' . $suffix .'.js', WC_PLUGIN_FILE ),
                 'deps' => array( 'jquery' ),
                 'version' => C4P_VERSION,
             ),

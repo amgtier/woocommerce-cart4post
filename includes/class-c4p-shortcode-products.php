@@ -10,7 +10,7 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
      * C4P_Shortcode_Products version
      */
 	/**
-	 * Loop over found products.
+	 * Dummy explain wording
 	 *
 	 * @since  3.2.0
 	 * @return string
@@ -26,8 +26,8 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
 	protected function product_loop() {
 		global $woocommerce_loop;
         global $c4p_cart_id;
-        $c4p_cart_id = get_the_ID();
         global $cart_id;
+        $c4p_cart_id = get_the_ID();
         $cart_id = get_the_ID();
         // error_log( sprintf( 'product loop global cart id: %s', $cart_id ) );
 
@@ -40,6 +40,8 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
 		ob_start();
 
         printf( "<script> var post_id=%s; </script>", get_the_ID() ); // resolved by global var
+        // moved to checkout
+        // WC()->cart->add_discount( sanitize_text_field( $_GET['coupon_code'] ) );
 
 		if ( $products_ids ) {
 			// Prime meta cache to reduce future queries.
@@ -86,8 +88,10 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
 		woocommerce_reset_loop();
 
         // error_log( sprintf( "short code product cart id: %s, post id: %s", $c4p_cart_id, get_the_ID() ) );
-        WC()->cart->calculate_totals();
-        do_action( 'c4p_cart_collaterals', get_the_ID() );
+        // if ( WC()->cart ){
+        //     WC()->cart->calculate_totals();
+        // }
+        // do_action( 'c4p_cart_collaterals', get_the_ID() );
 
 		return '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">' . ob_get_clean() . '</div>';
 	}
