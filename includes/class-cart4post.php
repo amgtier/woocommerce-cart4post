@@ -85,7 +85,7 @@ class Cart4Post {
 
     private function init_hooks() {
         // add_action( 'init', array( 'Cart4Post', 'init' ) );
-        add_action( 'init', array( $this, 'includes' ) );
+        add_action( 'init', array( $this, 'includes' ), 8 );
         add_action( 'init', array( 'C4P_Shortcodes', 'init' ) );
     }
 

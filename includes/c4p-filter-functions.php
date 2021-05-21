@@ -139,6 +139,110 @@ if ( ! function_exists( 'c4p_shortcode_products_query' ) ){
     }
 }
 
+add_filter( 'woocommerce_register_shop_order_post_statuses', 'c4p_register_post_status', 10, 1);
+if ( ! function_exists( 'c4p_register_post_status' ) ){
+    function c4p_register_post_status( $arr ){
+        $arr[ 'wc-c4p-processing' ] = array(
+            'label'                     => _x( 'C4P Processing', 'Order status', 'c4p' ),
+            'public'                    => false,
+            'exclude_from_search'       => false,
+            'show_in_admin_all_list'    => true,
+            'show_in_admin_status_list' => true,
+            'label_count'               => _n_noop( 'C4P Processing <span class="count">(%s)</span>', 'C4P Processing <span class="count">(%s)</span>', 'c4p' ),
+        );
+        $arr[ 'wc-c4p-on-hold' ] = array(
+            'label'                     => _x( 'C4P On hold', 'Order status', 'c4p' ),
+            'public'                    => false,
+            'exclude_from_search'       => false,
+            'show_in_admin_all_list'    => true,
+            'show_in_admin_status_list' => true,
+            'label_count'               => _n_noop( 'C4P On hold <span class="count">(%s)</span>', 'C4P On hold <span class="count">(%s)</span>', 'c4p' ),
+        );
+        $arr[ 'wc-c4p-completed' ] = array(
+            'label'                     => _x( 'C4P Completed', 'Order status', 'c4p' ),
+            'public'                    => false,
+            'exclude_from_search'       => false,
+            'show_in_admin_all_list'    => true,
+            'show_in_admin_status_list' => true,
+            'label_count'               => _n_noop( 'C4P Completed <span class="count">(%s)</span>', 'C4P Completed <span class="count">(%s)</span>', 'c4p' ),
+        );
+        return $arr;
+    }
+}
+
+add_filter( 'wc_order_statuses', 'c4p_order_statuses', 10, 1);
+if ( ! function_exists( 'c4p_order_statuses' ) ){
+    function c4p_order_statuses( $arr ){
+        $arr[ 'wc-c4p-processing' ] = _x( 'C4P Processing', 'Order status', 'c4p' );
+        $arr[ 'wc-c4p-on-hold' ] = _x( 'C4P On hold', 'Order status', 'c4p' );
+        $arr[ 'wc-c4p-completed' ] = _x( 'C4P Completed', 'Order status', 'c4p' );
+        return $arr;
+    }
+}
+
+// need to query order_item_type=coupon, order_item_name=code_name
+add_filter( 'posts_where', 'c4p_query_posts_where', 10, 2);
+if ( ! function_exists( 'c4p_query_posts_where' ) ){
+    function c4p_query_posts_where( $where, $wp_query ){
+        if ( array_key_exists( "woocommerce_order_item_query", $wp_query->query_vars ) ) {
+            foreach( $wp_query->query_vars[ "woocommerce_order_item_query" ] as $order_item ){
+                if ( is_array( $order_item ) && array_key_exists( "order_item_type", $order_item ) ) {
+                    $where .= " AND ( ( wp_woocommerce_order_items.order_item_type = '{$order_item[ "order_item_type" ]}' AND wp_woocommerce_order_items.order_item_name = '{$order_item[ "value" ]}' ) ) ";
+                }
+            }
+        }
+        return $where;
+    }
+}
+
+// need to query order_item_type=coupon, order_item_name=code_name
+add_filter( 'posts_join', 'c4p_query_posts_join', 10, 2);
+if ( ! function_exists( 'c4p_query_posts_join' ) ){
+    function c4p_query_posts_join( $join, $wp_query ){
+        if ( array_key_exists( "woocommerce_order_item_query", $wp_query->query_vars ) ) {
+            $join .= " INNER JOIN wp_woocommerce_order_items ON ( wp_posts.ID = wp_woocommerce_order_items.order_id )";
+        }
+        return $join;
+    }
+}
+
+add_filter( 'request', 'c4p_request_query', 10, 1);
+if ( ! function_exists( 'c4p_request_query' ) ){
+    function c4p_request_query( $vars ){
+        if ( isset( $_GET[ 'coupon_code' ] ) && !empty( $_GET[ 'coupon_code' ] ) ) {
+            $vars[ 'woocommerce_order_item_query' ] = array_merge( $vars, array( 
+                array(
+                    'order_item_type'       => 'coupon',
+                    'value'     => wc_clean( $_GET[ 'coupon_code' ] ),
+                    'compoare'  => '=',
+            ) ) );
+        }
+        return $vars;
+    }
+}
+
+add_filter( 'woocommerce_thankyou_order_id', 'c4p_set_order_status', 10, 1 );
+if ( ! function_exists( 'c4p_set_order_status' ) ) {
+    function c4p_set_order_status( $order_id ) {
+        $order = wc_get_order( $order_id );
+        if ( $order ) {
+            $referer = parse_url( wp_get_referer() );
+            parse_str( $referer[ "query" ], $r_GET );
+            error_log( "r_GET" );
+            error_log( $r_GET[ "c4p" ] );
+            if ( isset( $r_GET[ "c4p" ] ) ) {
+                if ( $order->get_status() == "on-hold" ){
+                    $order->update_status( "c4p-on-hold" );
+                }
+                else if ( $order->get_status() == "processing" ){
+                    $order->update_status( "c4p-processing" );
+                }
+            }
+        }
+        return $order_id;
+    }
+}
+
 /********************/
 /*     Discarded    */
 /********************/
