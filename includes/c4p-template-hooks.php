@@ -112,4 +112,117 @@ if ( ! function_exists( 'c4p_cart_totals' ) ) {
         } }
 }
 
+add_action( 'restrict_manage_posts', 'c4p_filter_coupon', 11 );
+if ( ! function_exists( 'c4p_filter_coupon' ) ) {
+    function c4p_filter_coupon( ) {
+        global $wpdb;
+        if ( isset( $_GET[ 'post_status' ] ) && 
+            ( wc_clean( $_GET[ 'post_status' ] ) == "wc-c4p-processing" ||
+             wc_clean( $_GET[ 'post_status' ] ) == "wc-c4p-on-hold" )
+            ) {
+            $group_buys =  $wpdb->get_col( $wpdb->prepare( "
+                SELECT DISTINCT meta_value
+                FROM $wpdb->postmeta
+                WHERE meta_key = '_c4p';
+            ", 1 ) );
+            $coupons =  $wpdb->get_col( $wpdb->prepare( "
+                SELECT post_title
+                FROM $wpdb->posts
+                WHERE 1
+                AND post_type = 'shop_coupon'
+                AND post_status = 'publish';
+            ", 1 ) );
+        ?>
+            <select name="c4p" data-placeholder="<?php esc_attr_e( 'Search for a group buy', 'c4p' ); ?>" data-allow_clear="true">
+                <option value="">All group buys</option>
+        <?php
+                    foreach ( $group_buys as $idx => $group_buy ) {
+                        $selected = isset( $_GET[ 'c4p' ] ) && $_GET[ 'c4p' ] == $group_buy ? "selected" : "";
+                        echo "<option value='" . $group_buy . "' " . $selected . ">" . get_the_title( $group_buy ) . "</option>";
+                    }
+        ?>
+
+            </select>
+
+            <select name="coupon_code" data-placeholder="<?php esc_attr_e( 'Search for a coupon code', 'c4p' ); ?>" data-allow_clear="true">
+                <option value="">All coupons</option>
+        <?php
+                foreach ( $coupons as $idx => $coupon ) {
+                    $selected = isset( $_GET[ 'coupon_code' ] ) && $_GET[ 'coupon_code' ] == $coupon ? "selected" : "";
+                       echo "<option " . $selected . " >" . $coupon . "</option>";
+                }
+        ?>
+            </select>
+        <?php
+            if ( isset( $_GET[ 'c4p' ] ) ) {
+                echo "<input type='button' class='button' onClick='send_order()' value='" . __( 'Send to ECFit', 'c4p' ) . "' id='c4p-send-order' />
+                       <script>
+
+                        function send_order() {
+                            document.getElementById( 'c4p-send-order' ).disabled = true;
+
+                            var xmlhttp = new XMLHttpRequest();
+
+                            xmlhttp.onreadystatechange = function() {
+                                if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+                                    if (xmlhttp.status == 200) {
+                                        alert('執行成功');
+                                    } else if (xmlhttp.status == 400) {
+                                        alert('執行失敗');
+                                    } else {
+                                        alert('執行失敗');
+                                    }
+                                    document.getElementById( 'send_button' ).disabled = false;
+                                }
+                            };
+
+                            alert( '" . get_admin_url() . "admin.php?page=ECFIT&send=1&c4p=" . $_GET[ 'c4p' ] . "');
+                            // xmlhttp.open( 'GET', " . get_admin_url() . " + '/admin.php?page=ECFIT&send=1&c4p=" . $_GET[ 'c4p' ] . "', true);
+                            // xmlhttp.send();
+                        }
+
+                        </script>";
+            }
+        }
+    }
+}
+
+add_action( 'manage_shop_order_posts_columns', 'c4p_shop_order_posts_columns', 9 );
+if ( ! function_exists( 'c4p_shop_order_posts_columns' ) ) {
+    function c4p_shop_order_posts_columns( $existing_columns ) {
+
+        if ( empty( $existing_columns ) && ! is_array( $existing_columns ) ) {
+             $existing_columns = array();
+        }
+
+        $columns = array();
+        if ( isset( $_GET[ 'post_status' ] ) && (
+            $_GET[ 'post_status' ] == 'wc-c4p-on-hold' || 
+            $_GET[ 'post_status' ] == 'wc-c4p-processing'
+        ) ) {
+            $columns[ 'c4p' ] = __( 'C4P', 'c4p' );
+            // $columns[ 'coupon' ] = __( 'coupon', 'c4p' );
+        }
+        return array_merge( $columns, $existing_columns );
+    }
+}
+
+add_action( 'manage_shop_order_posts_custom_column', 'c4p_render_shop_order_columns', 1 );
+if ( ! function_exists( 'c4p_render_shop_order_columns' ) ) {
+    function c4p_render_shop_order_columns( $column ) {
+        global $post, $the_order;
+
+        if ( empty( $the_order ) || $the_order->get_id() !== $post->ID ) {
+            $the_order = wc_get_order( $post->ID );
+        }
+
+        switch ( $column ) {
+            case 'c4p':
+                if ( get_post_meta( $post->ID, '_c4p' ) ) {
+                    printf( get_the_title( get_post_meta( $post->ID, '_c4p' )[0] ) );
+                }
+        }
+    }
+}
+
 ?>

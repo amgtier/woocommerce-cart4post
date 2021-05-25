@@ -209,6 +209,14 @@ if ( ! function_exists( 'c4p_query_posts_join' ) ){
 add_filter( 'request', 'c4p_request_query', 10, 1);
 if ( ! function_exists( 'c4p_request_query' ) ){
     function c4p_request_query( $vars ){
+        if ( isset( $_GET[ 'c4p' ] ) && !empty( $_GET[ 'c4p' ] ) ) {
+            $vars[ 'meta_query' ] = array_merge( $vars, array( 
+                array(
+                    'key'       => '_c4p',
+                    'value'     => (int) wc_clean( $_GET[ 'c4p' ] ),
+                    'compoare'  => '=',
+            ) ) );
+        }
         if ( isset( $_GET[ 'coupon_code' ] ) && !empty( $_GET[ 'coupon_code' ] ) ) {
             $vars[ 'woocommerce_order_item_query' ] = array_merge( $vars, array( 
                 array(
@@ -228,9 +236,9 @@ if ( ! function_exists( 'c4p_set_order_status' ) ) {
         if ( $order ) {
             $referer = parse_url( wp_get_referer() );
             parse_str( $referer[ "query" ], $r_GET );
-            error_log( "r_GET" );
-            error_log( $r_GET[ "c4p" ] );
             if ( isset( $r_GET[ "c4p" ] ) ) {
+                update_post_meta( $order_id, "_c4p", $r_GET[ "c4p" ] );
+                error_log( get_post_meta( $order_id, "_c4p" ) );
                 if ( $order->get_status() == "on-hold" ){
                     $order->update_status( "c4p-on-hold" );
                 }
