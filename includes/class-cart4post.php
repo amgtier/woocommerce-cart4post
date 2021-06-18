@@ -2,7 +2,7 @@
 /**
  *
  * @class Cart4Post
- * @version 0.0.1
+ * @version 1.0.0
  */
 
 class Cart4Post {
@@ -10,7 +10,7 @@ class Cart4Post {
      * Cart4Post version
      * @var string
      */
-    public $version = '0.0.1';
+    public $version = '1.0.0';
     /**
      * The single instance of the class.
      *
@@ -36,7 +36,7 @@ class Cart4Post {
     public function __construct() {
         // exec when woocomerce exists.
         include_once (ABSPATH . 'wp-admin/includes/plugin.php' );
-        if ( class_exists( 'WooCommerce' ) ){
+        if ( function_exists( 'WC' ) || class_exists( 'WooCommerce' ) ){
             // initiates
             $this -> define_constants();
             $this -> init_hooks();

@@ -46,4 +46,4 @@ class C4P_Admin {
 
 };
 
-return new C4P_Admin();
+// return new C4P_Admin();
