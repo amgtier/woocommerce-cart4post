@@ -7,6 +7,7 @@
 
 add_action('c4p_after_shop_loop_item', 'c4p_template_loop_add_quantity');
 add_action('c4p_checkout_order_review', 'c4p_checkout_payment', 20);
+add_action('c4p_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20);
 
 if ( ! function_exists( 'c4p_template_loop_add_quantity' ) ) {
     function c4p_template_loop_add_quantity( $args = array() ) {
