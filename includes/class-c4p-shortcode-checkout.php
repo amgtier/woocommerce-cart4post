@@ -21,20 +21,6 @@ class C4P_Shortcode_Checkout extends WC_Shortcode_Checkout {
 		if ( is_null( WC()->cart ) ) {
 			return;
 		}
-		// Backwards compatibility with old pay and thanks link arguments
-		// if ( isset( $_GET['order'] ) && isset( $_GET['key'] ) ) {
-		// 	wc_deprecated_argument( __CLASS__ . '->' . __FUNCTION__, '2.1', '"order" is no longer used to pass an order ID. Use the order-pay or order-received endpoint instead.' );
-
-		// 	// Get the order to work out what we are showing
-		// 	$order_id = absint( $_GET['order'] );
-		// 	$order    = wc_get_order( $order_id );
-
-		// 	if ( $order && $order->has_status( 'pending' ) ) {
-		// 		$wp->query_vars['order-pay'] = absint( $_GET['order'] );
-		// 	} else {
-		// 		$wp->query_vars['order-received'] = absint( $_GET['order'] );
-		// 	}
-		// }
 
 		// Handle checkout actions
 		if ( ! empty( $wp->query_vars['order-pay'] ) ) {
@@ -59,11 +45,6 @@ class C4P_Shortcode_Checkout extends WC_Shortcode_Checkout {
 
 		// Show non-cart errors
 		wc_print_notices();
-
-		// Check cart has contents
-		// if ( WC()->cart->is_empty() ) {
-		// 	return;
-		// }
 
 		// Check cart contents for errors
 		// do_action( 'woocommerce_check_cart_items' );

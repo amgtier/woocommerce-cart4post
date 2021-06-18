@@ -5,9 +5,7 @@
  * @version 0.0.1
  */
 
-// remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart');
 add_action('c4p_after_shop_loop_item', 'c4p_template_loop_add_quantity');
-// add_action('c4p_checkout_order_review', 'woocommerce_checkout_payment', 20);
 add_action('c4p_checkout_order_review', 'c4p_checkout_payment', 20);
 
 if ( ! function_exists( 'c4p_template_loop_add_quantity' ) ) {
@@ -48,7 +46,6 @@ if ( ! function_exists( 'c4p_template_loop_add_quantity' ) ) {
 
 			$args = apply_filters( 'woocommerce_loop_add_to_cart_args', wp_parse_args( $args, $defaults ), $product );
 
-            // wc_get_template( 'loop/add-to-cart.php', $args );
             wp_nonce_field( 'woocommerce-cart' ); 
 
             $attr_max = '';
@@ -84,13 +81,6 @@ if ( ! function_exists( 'c4p_checkout_payment' ) ) {
     function c4p_checkout_payment() {
         $available_gateways = WC()->payment_gateways()->get_available_payment_gateways();
         WC()->payment_gateways()->set_current_gateway( $available_gateways );
-        /*
-        wc_get_template( 'checkout/payment.php', array(
-            'checkout'          => WC()->checkout(),
-            'available_gateways'=> $available_gateways,
-            'order_button_text' => apply_filters( 'woocommerce_order_button_text', __( 'Place order', 'woocommerce' ) ),
-        ) ); 
-         */
         wc_get_template( 'checkout/payment.php', array(
             'checkout'          => WC()->checkout(),
             'available_gateways'=> $available_gateways,

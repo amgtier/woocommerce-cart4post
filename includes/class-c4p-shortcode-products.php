@@ -29,7 +29,6 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
         global $cart_id;
         $c4p_cart_id = get_the_ID();
         $cart_id = get_the_ID();
-        // error_log( sprintf( 'product loop global cart id: %s', $cart_id ) );
 
 		$columns                     = absint( $this->attributes['columns'] );
 		$classes                     = $this->get_wrapper_classes( $columns );
@@ -86,12 +85,6 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
 		}
 
 		woocommerce_reset_loop();
-
-        // error_log( sprintf( "short code product cart id: %s, post id: %s", $c4p_cart_id, get_the_ID() ) );
-        // if ( WC()->cart ){
-        //     WC()->cart->calculate_totals();
-        // }
-        // do_action( 'c4p_cart_collaterals', get_the_ID() );
 
 		return '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">' . ob_get_clean() . '</div>';
 	}

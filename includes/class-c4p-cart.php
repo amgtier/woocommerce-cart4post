@@ -42,7 +42,6 @@ class C4P_Cart extends WC_Cart{
 
         ob_start();
         do_action( 'c4p_cart_collaterals' );
-        // do_action( 'woocommerce_cart_collaterals' );
         $totals = ob_get_clean();
         wc_print_notices();
         $notices = ob_get_clean();

@@ -39,9 +39,7 @@ class Cart4Post {
         if ( class_exists( 'WooCommerce' ) ){
             // initiates
             $this -> define_constants();
-            // $this -> install();
             $this -> init_hooks();
-            // $this -> init();
         } else {
             $class = 'notice notice-error';
             $message = __( 'Install and activate Woocommerce first.' );
@@ -71,7 +69,6 @@ class Cart4Post {
         include_once( C4P_ABSPATH . 'includes/class-c4p-shortcode-checkout.php');
         include_once( C4P_ABSPATH . 'includes/c4p-template-hooks.php');
         include_once( C4P_ABSPATH . 'includes/c4p-filter-functions.php');
-        // include_once( C4P_ABSPATH . 'includes/c4p-product-type.php');
     }
 
     private function install() {
@@ -84,7 +81,6 @@ class Cart4Post {
     }
 
     private function init_hooks() {
-        // add_action( 'init', array( 'Cart4Post', 'init' ) );
         add_action( 'init', array( $this, 'includes' ), 8 );
         add_action( 'init', array( 'C4P_Shortcodes', 'init' ) );
     }
