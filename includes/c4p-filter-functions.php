@@ -56,13 +56,19 @@ if ( ! function_exists( 'c4p_get_cart_contents' ) ){
             $c4p_cart_id = $_POST[ 'cart_id' ];
             $GLOBALS[ 'post' ] = $_POST[ 'cart_id' ];
         }
-        else if ( isset( $_POST[ 'cart_id' ] ) && isset( $_SERVER[ 'HTTP_REFERER' ] ) && isset( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ] ) ) {
-            $c4p_cart_id = $_POST[ 'cart_id' ];
+        else if ( ( isset( $_POST[ 'cart_id' ]  ) || ( isset( $_GET[ 'wc-ajax' ] ) && $_GET[ 'wc-ajax' ] == 'checkout' ) ) && 
+            isset( $_SERVER[ 'HTTP_REFERER' ] ) && isset( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ] ) ) {
+            // checkout to order using: REQUEST_URI w/ ?wc-ajax=checkout; HTTP_REFERER w/ ?c4p=<post_id>
             $query = [];
             parse_str( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ], $query );
             if ( isset( $query[ 'c4p' ] ) ) {
                 $GLOBALS[ 'post' ] = $query[ 'c4p' ];
             }    
+            if ( isset( $_POST[ 'cart_id' ] ) ) {
+                $c4p_cart_id = $_POST[ 'cart_id' ];
+            } else {
+                $c4p_cart_id = $GLOBALS[ 'post' ];
+            }
         }
 
         $will_set_cart = strpos( wp_debug_backtrace_summary(), 'WC_Cart_Session->set_session' ) !== false;
