@@ -59,7 +59,8 @@ class Cart4Post {
     }
 
     public function includes() {
-        include_once( C4P_ABSPATH . 'admin/class-c4p-admin.php');
+        // admin page not implemented.
+        // include_once( C4P_ABSPATH . 'admin/class-c4p-admin.php');
         include_once( C4P_ABSPATH . 'includes/class-c4p-ajax.php');
         include_once( C4P_ABSPATH . 'includes/class-c4p-shortcodes.php');
         include_once( C4P_ABSPATH . 'includes/class-c4p-cart.php');

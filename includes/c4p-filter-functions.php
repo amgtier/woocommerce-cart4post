@@ -48,11 +48,16 @@ if ( ! function_exists( 'c4p_get_cart_contents' ) ){
             $c4p_cart_id = $_GET[ 'c4p' ];
             $GLOBALS[ 'post' ] = $_GET[ 'c4p' ];
         }
+        else if ( isset( $_GET[ 'cart_id' ] ) ){
+            $c4p_cart_id = $_GET[ 'cart_id' ];
+            $GLOBALS[ 'post' ] = $_GET[ 'cart_id' ];
+        }
         else if ( isset( $_POST[ 'cart_id' ] ) ){
             $c4p_cart_id = $_POST[ 'cart_id' ];
             $GLOBALS[ 'post' ] = $_POST[ 'cart_id' ];
         }
-        else if ( isset( $_SERVER[ 'HTTP_REFERER' ] ) && isset( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ] ) ) {
+        else if ( isset( $_POST[ 'cart_id' ] ) && isset( $_SERVER[ 'HTTP_REFERER' ] ) && isset( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ] ) ) {
+            $c4p_cart_id = $_POST[ 'cart_id' ];
             $query = [];
             parse_str( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ], $query );
             if ( isset( $query[ 'c4p' ] ) ) {
@@ -188,14 +193,15 @@ if ( ! function_exists( 'c4p_query_posts_join' ) ){
     }
 }
 
+// used for adminp age
 add_filter( 'request', 'c4p_request_query', 10, 1);
 if ( ! function_exists( 'c4p_request_query' ) ){
     function c4p_request_query( $vars ){
-        if ( isset( $_GET[ 'c4p' ] ) && !empty( $_GET[ 'c4p' ] ) ) {
+        if ( isset( $_GET[ '_c4p' ] ) && !empty( $_GET[ '_c4p' ] ) ) {
             $vars[ 'meta_query' ] = array_merge( $vars, array( 
                 array(
                     'key'       => '_c4p',
-                    'value'     => (int) wc_clean( $_GET[ 'c4p' ] ),
+                    'value'     => (int) wc_clean( $_GET[ '_c4p' ] ),
                     'compoare'  => '=',
             ) ) );
         }

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class C4P_Checkout_discard extends WC_Checkout{
+class C4P_Checkout extends WC_Checkout{
     /**
      * C4P_Checkout version
      */
@@ -23,10 +23,7 @@ class C4P_Checkout_discard extends WC_Checkout{
     }
 
     public function process_checkout() {
-        error_log( 'c4p process_checkout' );
-        error_log(http_build_query($_POST, '', ', '));
     }
-
 }
 
 ?>
