@@ -4,6 +4,18 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+add_filter( 'esunacq_order_failed_redirect', 'order_to_c4p_url', 10, 2 );
+if ( ! function_exists( 'order_to_c4p_url' ) ) {
+    function order_to_c4p_url( $order, $redirect ) {
+        $order_id = $order->get_id();
+        if ( get_post_meta( $order_id, '_c4p' ) ) {
+            return get_permalink( (int) get_post_meta( $order_id, '_c4p' )[0] );
+        } else {
+            return $redirect;
+        }
+    }
+}
+
 // add_to_cart
 add_filter( 'woocommerce_add_cart_item_data', 'prefix_add_cart_item_data' );
 if ( ! function_exists( 'prefix_add_cart_item_data' ) ) {
@@ -243,3 +255,18 @@ if ( ! function_exists( 'c4p_set_order_status' ) ) {
         return $order_id;
     }
 }
+
+add_action( 'woocommerce_checkout_order_processed', 'c4p_add_order_metadata', 10, 3 );
+if ( ! function_exists( 'c4p_add_order_metadata' ) ) {
+    function c4p_add_order_metadata( $order_id, $postdata, $order ) {
+        if ( isset( $_SERVER[ 'HTTP_REFERER' ] ) && isset( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ] ) ) {
+        // if ( isset( parse_url( wp_get_referer() )[ 'query' ] ) ) {
+            $query = [];
+            parse_str( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ], $query );
+            if ( isset( $query[ 'c4p' ] ) ) {
+                update_post_meta( $order_id, "_c4p", $query[ 'c4p' ] );
+            }
+        }
+    }
+}
+
