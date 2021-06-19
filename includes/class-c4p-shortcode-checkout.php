@@ -51,8 +51,9 @@ class C4P_Shortcode_Checkout extends WC_Shortcode_Checkout {
         if ( WC()->cart ){
             WC()->cart->calculate_totals();
         }
-        if ( isset( $_GET[ 'coupon_code' ] ) ) {
-            WC()->cart->add_discount( sanitize_text_field( $_GET[ 'coupon_code' ] ) );
+        WC()->cart->remove_coupons();
+        if ( isset( $_GET[ 'coupon' ] ) && !WC()->cart->has_discount( sanitize_text_field( $_GET[ 'coupon' ] ) ) ) {
+            WC()->cart->add_discount( sanitize_text_field( $_GET[ 'coupon' ] ) );
         }
         do_action( 'c4p_cart_collaterals', get_the_ID() );
         return; // Don't fill in checkout form here.
