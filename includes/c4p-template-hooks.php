@@ -55,7 +55,7 @@ if ( ! function_exists( 'c4p_template_loop_add_quantity' ) ) {
                 echo apply_filters( 'c4p_loop_edit_quantity_link',
                 sprintf('<form class="c4p-add-to-cart-form" data-product_id="%s" action="%s"><input type="number" name="%s" class="c4p-add-to-cart" value="%d" min="0" max="%s" data-product_id="%s" data-product_sku="%s" data-cart_id="%s" style="width: 100%%; height: 100%%"/></form>',
                 $product->get_id(), wc_get_cart_url(), $product_key !== "" ? sprintf( "cart[%s][qty]", $product_key ) : "", $product_qty
-                ,esc_attr( $product->get_stock_quantity() ), $product->get_id(), $product->get_sku(), $post_cart_id,
+                , esc_attr( $product->get_stock_quantity() ), $product->get_id(), $product->get_sku(), $post_cart_id,
                 ), $product);
                 $attr_max = "'max=" . $product -> get_stock_quantity() . "'";
             }

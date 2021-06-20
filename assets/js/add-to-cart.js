@@ -31,6 +31,9 @@ jQuery( function( $ ) {
             var data = {};
             data[ 'cart_id' ] = post_id;
 
+            $( ".cart-subtotal .woocommerce-Price-amount" ).html( "" );
+            $( ".shipping .woocommerce-Price-amount" ).html( "" );
+            $( ".order-total .woocommerce-Price-amount" ).html( "" );
 
             if ( target.attr( 'name' ).length == 0 ) { // value: 0 -> 1
                 $.each( $(target).data(), (key, val) => {

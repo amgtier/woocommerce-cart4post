@@ -270,3 +270,24 @@ if ( ! function_exists( 'c4p_add_order_metadata' ) ) {
     }
 }
 
+add_filter( 'woocommerce_return_to_shop_redirect', 'c4p_return_to_shop_redirect', 1 );
+if ( ! function_exists( 'c4p_return_to_shop_redirect' ) ) {
+    function c4p_return_to_shop_redirect( $link ) {
+        if ( isset( $_SERVER[ 'HTTP_REFERER' ] ) && $_SERVER[ 'HTTP_REFERER' ] != ( get_site_url() . '/' ) ) {
+            return $_SERVER[ 'HTTP_REFERER' ];
+        }
+        return $link;
+    }
+}
+
+// custome filter added at woocommerce/templates/checkout/cart-errors.php:31
+// href="<?php echo esc_url( apply_filters( 'c4p_cart_error_return_link', wc_get_page_permalink( 'cart' ) ) );
+add_filter( 'c4p_cart_error_return_link', 'c4p_cart_error_return_link', 10, 1 );
+if ( ! function_exists( 'c4p_cart_error_return_link' ) ) {
+    function c4p_cart_error_return_link( $link ) {
+        if ( isset( $_GET[ 'c4p' ] ) ) {
+            return get_permalink( $_GET[ 'c4p' ] );
+        }
+        return $link;
+    }
+}
