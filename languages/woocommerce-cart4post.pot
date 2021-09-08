@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Woocommerce Cart for posts plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Woocommerce Cart for posts 0.0.1\n"
+"Project-Id-Version: Woocommerce Cart for posts 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/c4p\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-09-08T07:17:26+00:00\n"
+"POT-Creation-Date: 2021-09-08T08:12:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: c4p\n"
@@ -32,6 +32,19 @@ msgstr ""
 
 #. Author URI of the plugin
 msgid "https://github.com/amgtier/"
+msgstr ""
+
+#: admin/class-c4p-admin.php:24
+#: admin/class-c4p-admin.php:25
+msgid "Cart4Post"
+msgstr ""
+
+#: admin/class-c4p-admin.php:34
+msgid "Cart4Post - Posts"
+msgstr ""
+
+#: admin/class-c4p-admin.php:35
+msgid "Posts"
 msgstr ""
 
 #: includes/c4p-filter-functions.php:109
@@ -97,4 +110,8 @@ msgstr ""
 
 #: includes/class-c4p-shortcode-products.php:21
 msgid "c4p product ids attr is not set."
+msgstr ""
+
+#: includes/class-cart4post.php:45
+msgid "Install and activate Woocommerce first."
 msgstr ""
