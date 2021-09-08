@@ -216,4 +216,37 @@ if ( ! function_exists( 'c4p_render_shop_order_columns' ) ) {
     }
 }
 
+add_action( 'bulk_edit_custom_box', 'product_bulk_edit', 10, 2 );
+if ( ! function_exists( 'product_bulk_edit' ) ) {
+    function product_bulk_edit( $column_name, $post_type ) {
+        if ( 'price' != $column_name || 'product' != $post_type ) {
+            return;
+        }    
+
+        $shipping_class = get_terms( 'product_shipping_class', array(
+            'hide_empty' => false,
+        ) ); 
+        echo "<fieldset class='inline-edit-col-right'><div class='inline-edit-col'><label class='inline-edit-status alignleft'>";
+        echo "<div class='inline-edit-group wp-clearfix'>";
+        echo "<span clas='title'>Group Buy</span>";
+        echo "<select name='_group_buy'>";
+        echo "<option value=''>-No Change-</option>";
+        echo "<option value='yes'>Yes</option>";
+        echo "<option value='no'>No</option>";
+        echo "</select>";
+        echo "</div>";
+        echo "</label></div></fieldset>";
+    }
+}
+
+// add_action( 'woocommerce_product_bulk_and_quick_edit', 'bulk_edit_variations', 10, 2 );
+add_action( 'woocommerce_product_bulk_and_quick_edit', 'bulk_edit_variations', 10, 2 );
+if ( ! function_exists( 'bulk_edit_variations' ) ) {
+    function bulk_edit_variations( $post_id, $product ) {
+        if ( isset( $_REQUEST[ '_group_buy' ] ) && ( $_REQUEST[ '_group_buy' ] == 'yes' || $_REQUEST[ '_group_buy' ] == 'no' ) ) {
+            update_post_meta( $post_id, '_group_buy', $_REQUEST[ '_group_buy' ] );
+        }
+    }
+}
+
 ?>

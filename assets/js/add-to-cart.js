@@ -11,6 +11,9 @@ jQuery( function( $ ) {
     var c4p_cart = {
 
         init: function() {
+            if ( typeof post_id === 'undefined' ) {
+                return; 
+            }
             this.update_cart = this.update_cart.bind( this );
 
             $( ".checkout-button" ).attr( "href", $( ".checkout-button" ).attr( "href" ) + "?c4p=" + post_id );
@@ -26,6 +29,9 @@ jQuery( function( $ ) {
 
         },
         update_cart: async ( preserve_notices, event, form ) => {
+            if ( typeof post_id === 'undefined' ) {
+                return; 
+            }
             var target = $(event.target);
             var form = target.parent();
             var data = {};
@@ -82,6 +88,9 @@ jQuery( function( $ ) {
     };
 
     function set_cart_totals() {
+        if ( typeof post_id === 'undefined' ) {
+            return; 
+        }
         var data = [];
         data[ 'cart_id' ] = post_id;
         $.ajax( {
