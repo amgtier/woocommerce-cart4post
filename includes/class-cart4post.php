@@ -42,7 +42,7 @@ class Cart4Post {
             $this -> init_hooks();
         } else {
             $class = 'notice notice-error';
-            $message = __( 'Install and activate Woocommerce first.' );
+            $message = __( 'Install and activate Woocommerce first.', 'c4p' );
             printf( '<br /><div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
         }
     }
