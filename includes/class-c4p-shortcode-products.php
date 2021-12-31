@@ -34,18 +34,14 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
 		$classes                     = $this->get_wrapper_classes( $columns );
 		$woocommerce_loop['columns'] = $columns;
 		$woocommerce_loop['name']    = $this->type;
-		$products_ids                = $this->get_products_ids();
+		$products_ids                = $this->get_query_results()->ids;
 
 		ob_start();
-
         printf( "<script> var post_id=%s; </script>", get_the_ID() ); // resolved by global var
-        // moved to checkout
-        // WC()->cart->add_discount( sanitize_text_field( $_GET['coupon_code'] ) );
-
 		if ( $products_ids ) {
 			// Prime meta cache to reduce future queries.
-			update_meta_cache( 'post', $products_ids );
-			update_object_term_cache( $products_ids, 'product' );
+			// update_meta_cache( 'post', $products_ids );
+			// update_object_term_cache( $products_ids, 'product' );
 
 			$original_post = $GLOBALS['post'];
 
@@ -57,7 +53,10 @@ class C4P_Shortcode_Products extends WC_Shortcode_Products {
                 // check group-buy post meta
                 $group_buy = get_post_meta( $product_id, '_group_buy' );
                 if ( count( $group_buy ) == 0 || $group_buy[0] != 'yes' ){
-                    printf( 'product_id: %d is not group_buy</br>', $product_id );
+                    if($WP_DEBUG){
+                        error_log( sprintf( 'product_id: %d is not group_buy</br>', $product_id ) );
+                        printf( 'product_id: %d is not group_buy</br>', $product_id );
+                    }
                     continue;
                 }
 

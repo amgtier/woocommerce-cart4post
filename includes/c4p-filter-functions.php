@@ -40,6 +40,19 @@ if( !function_exists( 'c4p_set_cart_id' ) ) {
     }
 }
 
+
+// add_to_cart -> returning freagments at adding
+add_filter( 'woocommerce_add_to_cart_fragments', 'c4p_add_to_cart_fragments', 10, 1);
+if( !function_exists( 'c4p_add_to_cart_fragments' ) ) {
+    function c4p_add_to_cart_fragments( $arr ){
+        foreach( WC()->cart->get_cart() as $cart_item_key => $cart_item ){
+            $arr[ "c4p_cart_item_keys" ][ $cart_item[ "product_id" ] ] = $cart_item[ "key" ];
+        }
+        // $arr[ "c4p_cart_item_keys" ] = WC()->cart->get_cart();
+        return $arr;
+    }
+}
+
 // show cart
 add_filter( 'woocommerce_cart_item_visible', 'c4p_cart_item_visible', 10, 3 );
 if( ! function_exists( 'c4p_cart_item_visible' ) ){
@@ -68,7 +81,11 @@ if ( ! function_exists( 'c4p_get_cart_contents' ) ){
             $c4p_cart_id = $_POST[ 'cart_id' ];
             $GLOBALS[ 'post' ] = $_POST[ 'cart_id' ];
         }
-        else if ( ( isset( $_POST[ 'cart_id' ]  ) || ( isset( $_GET[ 'wc-ajax' ] ) && $_GET[ 'wc-ajax' ] == 'checkout' ) ) && 
+        else if ( ( isset( $_POST[ 'cart_id' ]  ) || ( isset( $_GET[ 'wc-ajax' ] ) && 
+                ( $_GET[ 'wc-ajax' ] == 'update_order_review' )
+                // ( $_GET[ 'wc-ajax' ] == 'checkout' || 
+                // $_GET[ 'wc-ajax' ] == 'get_refreshed_fragments' ) 
+            ) ) && 
             isset( $_SERVER[ 'HTTP_REFERER' ] ) && isset( parse_url( $_SERVER[ 'HTTP_REFERER' ] )[ 'query' ] ) ) {
             // checkout to order using: REQUEST_URI w/ ?wc-ajax=checkout; HTTP_REFERER w/ ?c4p=<post_id>
             $query = [];

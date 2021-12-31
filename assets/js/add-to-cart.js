@@ -55,8 +55,7 @@ jQuery( function( $ ) {
                     success: ( res ) => {
                         console.log( data );
                         console.log( res );
-                        console.log( $(res.fragments[ 'div.widget_shopping_cart_content' ] ).find( 'a[data-product_id=' + data.product_id + ']' ) );
-                        let item_key = $( $(res.fragments[ 'div.widget_shopping_cart_content' ] ).find( 'a[data-product_id=' + data.product_id + ']' )[0] ).attr( 'data-cart_item_key' );
+                        let item_key = res.fragments[ 'c4p_cart_item_keys' ][ data.product_id ];
                         $(target).attr( 'name', 'cart[' + item_key + '][qty]' );
                         set_cart_totals();
                     }
