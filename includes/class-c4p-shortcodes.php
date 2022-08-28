@@ -30,7 +30,7 @@ class C4P_Shortcodes extends WC_Shortcodes{
     }
 
     public static function checkout( $atts ){
-        printf("<span>unresolved issue when ECFit is activated.</span>");
+        # printf("<span>unresolved issue when ECFit is activated.</span>");
         return self::shortcode_wrapper( array( 'C4P_Shortcode_Checkout', 'output' ), $atts );
     }
 }

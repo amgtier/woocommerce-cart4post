@@ -6,13 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_filter( 'esunacq_order_failed_redirect', 'order_to_c4p_url', 10, 2 );
 if ( ! function_exists( 'order_to_c4p_url' ) ) {
-    function order_to_c4p_url( $order, $redirect ) {
-        $order_id = $order->get_id();
-        if ( get_post_meta( $order_id, '_c4p' ) ) {
-            return get_permalink( (int) get_post_meta( $order_id, '_c4p' )[0] );
-        } else {
-            return $redirect;
+    function order_to_c4p_url( $redirect, $order ) {
+        error_log( 'order_to_c4p_url' );
+        if ( $order != null ){
+            $order_id = $order->get_id();
+            if ( get_post_meta( $order_id, '_c4p' ) ) {
+                return get_permalink( (int) get_post_meta( $order_id, '_c4p' )[0] );
+            }
         }
+        return $redirect;
     }
 }
 
@@ -122,7 +124,7 @@ if ( ! function_exists( 'c4p_get_product_type_options' ) ){
     function c4p_get_product_type_options( $arr ){
         $arr[ 'group_buy' ] = array(
             'id'                => '_group_buy',
-            'wrapper_class'     => 'show_if_simple',
+            # 'wrapper_class'     => 'show_if_simple',
             'label'             => __( 'Group Buy', 'c4p' ),
             'description'       => __( 'Group Buy', 'c4p' ),
             'default'           => 'no',

@@ -29,7 +29,6 @@ add_action('plugins_loaded', 'cart4post_init', 0);
 function cart4post_init() {
     function c4p_load_textdomain() {
         load_plugin_textdomain( 'woocommerce-cart4post', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-        error_log( dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
     add_action( 'plugins_loaded', 'c4p_load_textdomain' );
 

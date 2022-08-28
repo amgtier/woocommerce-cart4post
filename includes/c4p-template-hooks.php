@@ -228,7 +228,7 @@ if ( ! function_exists( 'product_bulk_edit' ) ) {
         ) ); 
         echo "<fieldset class='inline-edit-col-right'><div class='inline-edit-col'><label class='inline-edit-status alignleft'>";
         echo "<div class='inline-edit-group wp-clearfix'>";
-        echo "<span clas='title'>Group Buy</span>";
+        echo "<span class='title'>Group Buy</span>";
         echo "<select name='_group_buy'>";
         echo "<option value=''>-No Change-</option>";
         echo "<option value='yes'>Yes</option>";
