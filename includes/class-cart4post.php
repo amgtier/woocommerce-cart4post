@@ -2,7 +2,7 @@
 /**
  *
  * @class Cart4Post
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 class Cart4Post {
@@ -10,7 +10,7 @@ class Cart4Post {
      * Cart4Post version
      * @var string
      */
-    public $version = '1.0.0';
+    public $version = '1.1.0';
     /**
      * The single instance of the class.
      *
@@ -35,7 +35,7 @@ class Cart4Post {
      */
     public function __construct() {
         // exec when woocomerce exists.
-        include_once (ABSPATH . 'wp-admin/includes/plugin.php' );
+        include_once ( ABSPATH . 'wp-admin/includes/plugin.php' );
         if ( function_exists( 'WC' ) || class_exists( 'WooCommerce' ) ){
             // initiates
             $this -> define_constants();
@@ -68,6 +68,7 @@ class Cart4Post {
         include_once( C4P_ABSPATH . 'includes/class-c4p-checkout.php');
         include_once( C4P_ABSPATH . 'includes/class-c4p-shortcode-products.php');
         include_once( C4P_ABSPATH . 'includes/class-c4p-shortcode-checkout.php');
+        include_once( C4P_ABSPATH . 'includes/class-c4p-pre-order.php');
         include_once( C4P_ABSPATH . 'includes/c4p-template-hooks.php');
         include_once( C4P_ABSPATH . 'includes/c4p-filter-functions.php');
     }
